@@ -1,6 +1,7 @@
 import React from "react";
 import fetch from "node-fetch";
 import LoyalUser from "./loyal-user.component";
+import NewLoyaltyUser from "./new-loyalty-user.component";
 
 export default class LoyaltyCheckin extends React.Component {
 	constructor () {
@@ -18,6 +19,7 @@ export default class LoyaltyCheckin extends React.Component {
 			this.setState({ user });
 
 		} catch (err) {
+			// eslint-disable-next-line no-console
 			console.log(err);
 		}
 	}
@@ -32,10 +34,16 @@ export default class LoyaltyCheckin extends React.Component {
 		);
 	}
 
+	emptyUser = (user) => {
+		return (Object.keys(user).length === 0);
+	}
+
 	render() {
 		const { user } = this.state;
+		
 		return (
 			<div>
+				{ user && this.emptyUser(user) && <NewLoyaltyUser/> }
 				{ user && <LoyalUser user={user}/> }
 				{ !user && this.renderForm() }
 			</div>

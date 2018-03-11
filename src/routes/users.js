@@ -24,9 +24,14 @@ const findUser = async function (req, res) {
 	try {
 		const userphone = req.params.phone;
 		const user = await users.findUser(userphone);
-		const updatedUser = await users.update(user);
+	
+		if (user) {
+			const updatedUser = await users.update(user);
+			commonEndHandler(null, updatedUser, res);
 
-		commonEndHandler(null, updatedUser, res);
+		} else {
+			commonEndHandler(null, {}, res);
+		}
 			
 	} catch (err) {
 		logger.error(err);
@@ -34,7 +39,7 @@ const findUser = async function (req, res) {
 	}
 };
 
-const addUser = function(req, res) {
+const addUser = async function(req, res) {
 	const newUserObj = {
 		phone: req.body["phone"],
 		firstName: req.body["firstName"],
@@ -43,7 +48,15 @@ const addUser = function(req, res) {
 		points: 50,
 		checkins: 1
 	};
-	users.addUser(newUserObj, function(err, data) {commonEndHandler(err, data, res);});
+	try {
+		const newUser = await users.addUser(newUserObj);
+		commonEndHandler(null, newUser, res);
+		
+	} catch (err) {
+		logger.error(err);
+		commonEndHandler(err, null, res);
+	}
+	
 };
 
 const deleteUser = function(req, res) {

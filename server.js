@@ -2,12 +2,16 @@ const path = require("path");
 const express = require("express");
 const errorhandler = require("errorhandler");
 const compression = require("compression");
+const bodyParser = require("body-parser");
+
 const MongoClient = require("mongodb").MongoClient;
 
 const publicFolder = path.resolve(__dirname, "./public");
 
 const config = require("dotenv").config();
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
 
 app.use(function (req, res, next) {
@@ -21,13 +25,13 @@ app.use(function (req, res, next) {
 const connectWithRetry = async function (MONGODB_URL, databaseName, times) {
 	return await (async function retry () {
 		times--;
-		console.log("retry db", times)
 		try {
 			const client = await MongoClient.connect(MONGODB_URL);
 			const db = client.db(databaseName);
 			return db;
 
 		} catch (err) {
+			// eslint-disable-next-line no-console
 			console.error("Failed to connect to mongo on startup - retrying in 2 secs", err);
 			if (times > 0) {
 				setTimeout(retry, 2000);
@@ -38,7 +42,7 @@ const connectWithRetry = async function (MONGODB_URL, databaseName, times) {
 
 const startServer = async function (config) {
 	const { PORT, MONGODB_URL, databaseName, userCollection } = config;
-console.log("startserver mongourl", MONGODB_URL)
+
 	const log = require("./src/utils/logger");
 	const logger = log(config);
 	app.locals.logger = logger;
@@ -48,7 +52,7 @@ console.log("startserver mongourl", MONGODB_URL)
 		const db = await connectWithRetry(MONGODB_URL, databaseName, 4);
 		// const client = await MongoClient.connect(MONGODB_URL);
 		// const db = client.db(databaseName);
-	console.log("startserver got db", db)
+		console.log("startserver got db", db);
 
 		await db.collection(userCollection).createIndex(
 			{ "phone": 1 },
@@ -66,7 +70,7 @@ console.log("startserver mongourl", MONGODB_URL)
 	app.get("/health", (req, res) => res.status(200).json({ status: "ok" }));
 
 	app.use("/", express.static(publicFolder));
-	app.get("/", (req, res) => {
+	app.get(["/", "/new-user"], (req, res) => {
 		res.sendFile(path.resolve(publicFolder, "index.html"));
 	});
 

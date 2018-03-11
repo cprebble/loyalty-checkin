@@ -1,5 +1,6 @@
 import React from "react";
 import fetch from "node-fetch";
+import FormData from "form-data";
 import LoyalUser from "./loyal-user.component";
 
 export default class NewLoyaltyUser extends React.Component {
@@ -11,15 +12,23 @@ export default class NewLoyaltyUser extends React.Component {
 	handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const data = new FormData(event.target);			
+			const fdata = new FormData(event.target);
+			const data = {
+				firstName: fdata.get("firstName"),
+				lastName: fdata.get("lastName"),
+				email: fdata.get("email"),
+				phone: fdata.get("phone")
+			};		
 			const res = await fetch("/users", {
 				method: "POST",
-				body: data,
+				body:    JSON.stringify(data),
+    			headers: { "Content-Type": "application/json" }
 			});
 			const user = await res.json();
 			this.setState({ user });
 
 		} catch (err) {
+			// eslint-disable-next-line no-console
 			console.log(err);
 		}
 	}
@@ -40,7 +49,7 @@ export default class NewLoyaltyUser extends React.Component {
 					<label htmlFor="phone">Enter your phone number</label>
 					<input id="phone" name="phone" type="text" />
 			
-					<button>Send data!</button>
+					<button>Create User</button>
 				</form>
 			</div>
 		);
