@@ -4,10 +4,22 @@ const createLogger = (cfg) => {
 	return bunyan.createLogger({
 		name: "loyalty-checkin-exercise-logger",
 		src: true,
-		streams: [{
-			stream: process.stdout,
-			level: cfg.logLevel || "debug"
-		}],
+		streams: [
+			{
+				id: "stdout",
+				stream: process.stdout,
+				level: cfg.logLevel || "debug"
+			},
+			{
+				id: "rotatingFile",
+				type: "rotating-file",
+				period: "1d",
+				//period: '1d',   // daily rotation
+				count: 3,        // keep 3 back copies
+				path: "./logfile.log"  // log debug and above to a file
+			}
+			
+		],
 		serializers: bunyan.stdSerializers
 	});
 };

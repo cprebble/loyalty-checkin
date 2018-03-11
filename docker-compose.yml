@@ -1,8 +1,9 @@
-version: '2'
+version: "2"
 services:
   
   loyalty:
     build: .
+    container_name: "loyalty"
     depends_on:
       - mongo
     ports:

@@ -10,7 +10,7 @@
 		"build": "yarn webpack",
 		"start": "node src/back/server.js",
 		"prepare": "yarn lint && yarn build",
-		"local": "MONGODB_URL=mongodb://localhost:27017 node server.js | bunyan",
+		"local": "MONGODB_URL=mongodb://localhost:27017 node src/back/server.js | bunyan",
 		"test": "mocha --require test/mocha-setup.js \"src/**/*.spec.js\"",
 		"test-watch": "mocha --require test/mocha-setup.js \"src/**/*.spec.js\" --watch --watch-extensions js jsx",
 		"debug": "node --nolazy --inspect-brk=9229 server.js"
