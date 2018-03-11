@@ -12,7 +12,8 @@ const App = () => {
 			flexDirection: "column",
 			justifyContent: "center",
 			alignItems: "center",
-			margin: 50
+			margin: 50,
+			minWidth: 500
 		}}>
 			<Helmet title="Loyalty Exercise"></Helmet>
 			<Router>

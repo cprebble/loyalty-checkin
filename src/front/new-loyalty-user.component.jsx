@@ -35,29 +35,34 @@ export default class NewLoyaltyUser extends React.Component {
 
 	renderForm = () => {
 		return (
-			<div style={{
-				display: "flex",
-				flexDirection: "column",
-				justifyContent: "center",
-				alignItems: "center",
-				margin: 50
-			}}>
-				<form onSubmit={this.handleSubmit}>
+			<form 
+				onSubmit={this.handleSubmit}
+				style={{
+					display: "flex",
+					flexDirection: "column",
+					justifyContent: "space-between",
+					alignItems: "center",
+					margin: 50
+				}}>
+				<div>
 					<label htmlFor="firstName">Enter first name</label>
 					<input id="firstName" name="firstName" type="text" />
-
+				</div>
+				<div>
 					<label htmlFor="lastName">Enter last name</label>
 					<input id="lastName" name="lastName" type="text" />
-			
+				</div>
+				<div>
 					<label htmlFor="email">Enter your email</label>
 					<input id="email" name="email" type="email" />
-			
+				</div>
+				<div>
 					<label htmlFor="phone">Enter your phone number</label>
 					<input id="phone" name="phone" type="text" />
-			
-					<button>Create User</button>
-				</form>
-			</div>
+				</div>
+		
+				<button>Create User</button>
+			</form>
 		);
 	}
 	
