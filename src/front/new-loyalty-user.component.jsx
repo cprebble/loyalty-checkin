@@ -22,7 +22,7 @@ export default class NewLoyaltyUser extends React.Component {
 			const res = await fetch("/users", {
 				method: "POST",
 				body:    JSON.stringify(data),
-    			headers: { "Content-Type": "application/json" }
+				headers: { "Content-Type": "application/json" }
 			});
 			const user = await res.json();
 			this.setState({ user });
@@ -35,7 +35,13 @@ export default class NewLoyaltyUser extends React.Component {
 
 	renderForm = () => {
 		return (
-			<div>
+			<div style={{
+				display: "flex",
+				flexDirection: "column",
+				justifyContent: "center",
+				alignItems: "center",
+				margin: 50
+			}}>
 				<form onSubmit={this.handleSubmit}>
 					<label htmlFor="firstName">Enter first name</label>
 					<input id="firstName" name="firstName" type="text" />

@@ -1,45 +1,33 @@
 const path = require("path");
-const webpack = require("webpack");
-const HtmlPlugin = require("html-webpack-plugin");
+const BUILD_DIR = path.resolve(__dirname, "./build");
+
 
 module.exports = [
 	{
-		node: {
-			fs: "empty",
-			net: "empty",
-			dns: "empty",
-			module: "empty",
-			tls: "empty"
-		},
-		context: path.resolve(__dirname),
 		devtool: "source-map",
 		entry: {
-			index: "./src/index.jsx",
-			server: "./server.js"
-		},
-		resolve: {
-			extensions: [ ".js", ".jsx" ],
-			modules: ["node_modules"]
+			"index": path.join(__dirname, "src/front/index.jsx")
 		},
 		output: {
-			path: path.resolve(__dirname, "./public"),
-			filename: "[name].js"
+			path: BUILD_DIR,
+			filename: "index.js",
 		},
 		module: {
-			loaders: [
+			rules: [
 				{
+					test: /\.(jsx|js)?$/,
 					exclude: /node_modules/,
-					loader: "babel-loader",
-					test: /\.(js|jsx)$/
+					use: [
+						{
+							loader: "babel-loader",
+							
+						}
+					]
 				}
 			]
 		},
-		plugins: [
-			new webpack.optimize.CommonsChunkPlugin("common"),
-			new HtmlPlugin({
-				title: "Loyalty Checkin Exercise",
-				template: "./src/index.html"
-			})
-		]
+		resolve: {
+			extensions: [".js", ".jsx"]
+		}
 	}
 ];

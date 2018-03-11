@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 
 const MongoClient = require("mongodb").MongoClient;
 
-const publicFolder = path.resolve(__dirname, "./public");
+const publicFolder = path.resolve(__dirname, "../../");
 
 const config = require("dotenv").config();
 const app = express();
@@ -35,6 +35,8 @@ const connectWithRetry = async function (MONGODB_URL, databaseName, times) {
 			console.error("Failed to connect to mongo on startup - retrying in 2 secs", err);
 			if (times > 0) {
 				setTimeout(retry, 2000);
+			} else {
+				process.exit(1);
 			}
 		}
 	})();
@@ -43,17 +45,13 @@ const connectWithRetry = async function (MONGODB_URL, databaseName, times) {
 const startServer = async function (config) {
 	const { PORT, MONGODB_URL, databaseName, userCollection } = config;
 
-	const log = require("./src/utils/logger");
+	const log = require("./utils/logger");
 	const logger = log(config);
 	app.locals.logger = logger;
 	app.locals.cfg = config;
 
 	try {
 		const db = await connectWithRetry(MONGODB_URL, databaseName, 4);
-		// const client = await MongoClient.connect(MONGODB_URL);
-		// const db = client.db(databaseName);
-		console.log("startserver got db", db);
-
 		await db.collection(userCollection).createIndex(
 			{ "phone": 1 },
 			{ unique: true }
@@ -74,7 +72,7 @@ const startServer = async function (config) {
 		res.sendFile(path.resolve(publicFolder, "index.html"));
 	});
 
-	const userRoutes = require("./src/routes/users");
+	const userRoutes = require("./routes/users");
 	userRoutes(app);
 
 	app.use(errorhandler({ dumpExceptions: true, showStack: true }));
@@ -114,3 +112,5 @@ function getStackTraceFromError(err) {
 	const stack = (err && err.stack) || "";
 	return stack.split("\n");
 }
+
+// TODO: styling, email, docker, tests
