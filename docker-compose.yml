@@ -8,10 +8,9 @@ services:
     links:
       - mongo
     ports:
-      - "3333:3333"
+      - "8080:8080"
     environment:
-      - MONGO_URL=mongodb://mongo:27017/loyalty
-    command: ["yarn start"]
+      MONGODB_URL=mongodb://mongo:27017
 
   mongo:
     image: mongo:3.6

@@ -2,13 +2,11 @@ const Users = require("../models/users");
 let logger, users;
 
 const commonEndHandler = function(err, msg, res) {
-	//res.set({ 'Content-Type': 'application/json' });
 	if (err) {
 		logger.error(err);
 		res.status(err.status || err.statusCode || 500).send(err);
 	}
 	else {
-		console.log("commoneendhangeler", msg)
 		res.json(msg);
 	}
 };
@@ -23,12 +21,12 @@ const findUsers = async function (req, res) {
 };
 
 const findUser = async function (req, res) {
-console.log("finduser", req.params)
 	try {
 		const userphone = req.params.phone;
 		const user = await users.findUser(userphone);
-console.log("finduser found", user)
-		commonEndHandler(null, user, res);
+		const updatedUser = await users.update(user);
+
+		commonEndHandler(null, updatedUser, res);
 			
 	} catch (err) {
 		logger.error(err);
@@ -37,8 +35,6 @@ console.log("finduser found", user)
 };
 
 const addUser = function(req, res) {
-
-console.log("\n\nadduser", req.body)
 	const newUserObj = {
 		phone: req.body["phone"],
 		firstName: req.body["firstName"],

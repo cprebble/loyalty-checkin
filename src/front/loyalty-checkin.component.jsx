@@ -1,5 +1,6 @@
 import React from "react";
 import fetch from "node-fetch";
+import LoyalUser from "./loyal-user.component";
 
 export default class LoyaltyCheckin extends React.Component {
 	constructor () {
@@ -21,7 +22,7 @@ export default class LoyaltyCheckin extends React.Component {
 		}
 	}
 	
-	renderSubmitForm = () => {
+	renderForm = () => {
 		return (
 			<form onSubmit={this.handleSubmit}>
 				<label htmlFor="phone">Enter your phone number</label>
@@ -31,20 +32,12 @@ export default class LoyaltyCheckin extends React.Component {
 		);
 	}
 
-	renderSuccess = (user) => {
-		return (
-			<div>
-				{JSON.stringify(user)}
-			</div>
-		);
-	}
-
 	render() {
 		const { user } = this.state;
 		return (
 			<div>
-				{ user && this.renderSuccess(user) }
-				{ !user && this.renderSubmitForm() }
+				{ user && <LoyalUser user={user}/> }
+				{ !user && this.renderForm() }
 			</div>
 		);
 	}

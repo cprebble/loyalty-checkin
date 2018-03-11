@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 const HtmlPlugin = require("html-webpack-plugin");
 
 module.exports = [
@@ -13,13 +14,12 @@ module.exports = [
 		context: path.resolve(__dirname),
 		devtool: "source-map",
 		entry: {
-			index: [
-				"./src/index.jsx",
-				"./server.js"
-			]
+			index: "./src/index.jsx",
+			server: "./server.js"
 		},
 		resolve: {
-			extensions: [ ".js", ".jsx" ]
+			extensions: [ ".js", ".jsx" ],
+			modules: ["node_modules"]
 		},
 		output: {
 			path: path.resolve(__dirname, "./public"),
@@ -35,6 +35,7 @@ module.exports = [
 			]
 		},
 		plugins: [
+			new webpack.optimize.CommonsChunkPlugin("common"),
 			new HtmlPlugin({
 				title: "Loyalty Checkin Exercise",
 				template: "./src/index.html"

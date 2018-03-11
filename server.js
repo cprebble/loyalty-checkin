@@ -18,16 +18,37 @@ app.use(function (req, res, next) {
 	return next();
 });
 
+const connectWithRetry = async function (MONGODB_URL, databaseName, times) {
+	return await (async function retry () {
+		times--;
+		console.log("retry db", times)
+		try {
+			const client = await MongoClient.connect(MONGODB_URL);
+			const db = client.db(databaseName);
+			return db;
+
+		} catch (err) {
+			console.error("Failed to connect to mongo on startup - retrying in 2 secs", err);
+			if (times > 0) {
+				setTimeout(retry, 2000);
+			}
+		}
+	})();
+};
+
 const startServer = async function (config) {
 	const { PORT, MONGODB_URL, databaseName, userCollection } = config;
+console.log("startserver mongourl", MONGODB_URL)
 	const log = require("./src/utils/logger");
 	const logger = log(config);
 	app.locals.logger = logger;
 	app.locals.cfg = config;
 
 	try {
-		const client = await MongoClient.connect(MONGODB_URL);
-		const db = client.db(databaseName);
+		const db = await connectWithRetry(MONGODB_URL, databaseName, 4);
+		// const client = await MongoClient.connect(MONGODB_URL);
+		// const db = client.db(databaseName);
+	console.log("startserver got db", db)
 
 		await db.collection(userCollection).createIndex(
 			{ "phone": 1 },
@@ -59,7 +80,6 @@ const startServer = async function (config) {
 
 
 startServer(config.parsed);
-
 
 const exitHandler = function(err) {
 	// eslint-disable-next-line no-console

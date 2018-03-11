@@ -1,7 +1,9 @@
 import React from "react";
 import Helmet from "react-helmet";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import LoyaltyCheckin from "./loyalty-checkin.component";
 import NewLoyaltyUser from "./new-loyalty-user.component";
+
 
 const App = () => {
 	return (
@@ -9,10 +11,27 @@ const App = () => {
 			display: "flex",
 			flexDirection: "column",
 			justifyContent: "center",
-			alignItems: "center"
+			alignItems: "center",
+			margin: 50
 		}}>
 			<Helmet title="Loyalty Exercise"></Helmet>
-			<LoyaltyCheckin />
+			<Router>
+				<div>
+					<ul>
+						<li>
+						<Link to="/">User Checkin</Link>
+						</li>
+						<li>
+						<Link to="/new-user">New User</Link>
+						</li>
+					</ul>
+
+					<hr />
+
+					<Route exact path="/" component={LoyaltyCheckin} />
+					<Route path="/new-user" component={NewLoyaltyUser} />
+				</div>
+			</Router>
 		</div>
 	);
 };

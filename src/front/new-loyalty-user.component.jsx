@@ -1,18 +1,30 @@
 import React from "react";
 import fetch from "node-fetch";
+import LoyalUser from "./loyal-user.component";
 
 export default class NewLoyaltyUser extends React.Component {
-	handleSubmit = (event) => {
-		event.preventDefault();
-		const data = new FormData(event.target);
-		
-		fetch("/users", {
-			method: "POST",
-			body: data,
-		});
+	constructor () {
+		super();
+		this.state = {};
 	}
-	
-	render() {
+
+	handleSubmit = async (event) => {
+		event.preventDefault();
+		try {
+			const data = new FormData(event.target);			
+			const res = await fetch("/users", {
+				method: "POST",
+				body: data,
+			});
+			const user = await res.json();
+			this.setState({ user });
+
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	renderForm = () => {
 		return (
 			<div>
 				<form onSubmit={this.handleSubmit}>
@@ -30,6 +42,16 @@ export default class NewLoyaltyUser extends React.Component {
 			
 					<button>Send data!</button>
 				</form>
+			</div>
+		);
+	}
+	
+	render() {
+		const { user } = this.state;
+		return (
+			<div>
+				{ user && <LoyalUser user={user}/> }
+				{ !user && this.renderForm() }
 			</div>
 		);
 	}
