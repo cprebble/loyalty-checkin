@@ -1,6 +1,6 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import fetch from "node-fetch";
-import LoyalUser from "./loyal-user.component";
 import NewLoyaltyUser from "./new-loyalty-user.component";
 
 export default class LoyaltyCheckin extends React.Component {
@@ -8,6 +8,7 @@ export default class LoyaltyCheckin extends React.Component {
 		super();
 		this.state = {};
 	}
+
 	handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
@@ -17,13 +18,13 @@ export default class LoyaltyCheckin extends React.Component {
 			const res = await fetch(url);
 			const user = await res.json();
 			this.setState({ user });
-
+			
 		} catch (err) {
 			// eslint-disable-next-line no-console
 			console.log(err);
 		}
 	}
-	
+
 	renderForm = () => {
 		return (
 			<form onSubmit={this.handleSubmit}>
@@ -38,13 +39,20 @@ export default class LoyaltyCheckin extends React.Component {
 		return (Object.keys(user).length === 0);
 	}
 
+	renderUser = (user) => {
+		return <Redirect to={{
+			pathname: "/loyal-user",
+			state: { user }
+		}}/>;
+	}
+
 	render() {
 		const { user } = this.state;
 		
 		return (
 			<div>
 				{ user && this.emptyUser(user) && <NewLoyaltyUser/> }
-				{ user && <LoyalUser user={user}/> }
+				{ user && this.renderUser(user) }
 				{ !user && this.renderForm() }
 			</div>
 		);

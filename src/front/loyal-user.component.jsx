@@ -3,17 +3,23 @@ import * as PropTypes from "prop-types";
 
 export default class LoyalUser extends React.Component {
 	static propTypes = {
-		user: PropTypes.shape({
-			phone: PropTypes.string,
-			firstName: PropTypes.string,
-			lastName: PropTypes.string,
-			email: PropTypes.string,
-			checkins: PropTypes.number,
-			points: PropTypes.number
+		location: PropTypes.shape({
+			state: PropTypes.shape({
+				user: PropTypes.shape({
+					phone: PropTypes.string,
+					firstName: PropTypes.string,
+					lastName: PropTypes.string,
+					email: PropTypes.string,
+					checkins: PropTypes.number,
+					points: PropTypes.number
+				})
+			})
 		})
+		
 	};
+
 	render() {
-		const { user } = this.props;
+		const user = this.props.location.state.user;
 		const { firstName, lastName, phone, email, checkins, points } = user;
 		return (
 			<div style={{

@@ -1,9 +1,22 @@
 import React from "react";
 import Helmet from "react-helmet";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { MemoryRouter as Router, Route, Switch, withRouter } from "react-router-dom";
 import LoyaltyCheckin from "./loyalty-checkin.component";
 import NewLoyaltyUser from "./new-loyalty-user.component";
+import LoyalUser from "./loyal-user.component";
 
+const Menu = withRouter(({ history }) => {
+	return (
+		<ul>
+			<li>
+				<a onClick={()=>history.push("/checkin")} >User Checkin</a>
+			</li>
+			<li>
+				<a onClick={()=>history.push("/new-user")} >New User</a>
+			</li>
+		</ul>
+	);
+});
 
 const App = () => {
 	return (
@@ -16,21 +29,17 @@ const App = () => {
 			minWidth: 500
 		}}>
 			<Helmet title="Loyalty Exercise"></Helmet>
-			<Router>
+			<Router
+				initialEntries={[ "/checkin", "/new-user", "/loyal-user" ]}
+				initialIndex={0}>
 				<div>
-					<ul>
-						<li>
-						<Link to="/">User Checkin</Link>
-						</li>
-						<li>
-						<Link to="/new-user">New User</Link>
-						</li>
-					</ul>
-
+					<Menu/>
 					<hr />
-
-					<Route exact path="/" component={LoyaltyCheckin} />
-					<Route path="/new-user" component={NewLoyaltyUser} />
+					<Switch>
+						<Route path="/loyal-user" component={LoyalUser} />
+						<Route path="/new-user" component={NewLoyaltyUser} />
+						<Route path="/checkin" component={LoyaltyCheckin} />
+					</Switch>
 				</div>
 			</Router>
 		</div>

@@ -9,7 +9,7 @@ Users.prototype.findUser = async function (userphone) {
 	try {
 		const collection = this.db.collection(this.userCollection);
 		const user = await collection.find({ phone: userphone }).toArray();
-	
+
 		if (user.length < 1) {
 			const msg = makeUserMsg(userphone, "does not exist.");
 			this.logger.info(msg);
@@ -46,8 +46,8 @@ Users.prototype.addUser = async function (newUserObj) {
 			return newUser[0];
 		}
 		else {
-			const msg = makeUserMsg(existingUser.phone, "already exists.");
-			logger.debug({ user: existingUser.phone }, msg);
+			const msg = makeUserMsg(newUserObj.phone, "already exists.");
+			logger.debug({ user: newUserObj.phone }, msg);
 			return existingUser[0];
 		}
 	} catch (err) {

@@ -1,7 +1,7 @@
 import React from "react";
 import fetch from "node-fetch";
+import { Redirect } from "react-router-dom";
 import FormData from "form-data";
-import LoyalUser from "./loyal-user.component";
 
 export default class NewLoyaltyUser extends React.Component {
 	constructor () {
@@ -65,12 +65,19 @@ export default class NewLoyaltyUser extends React.Component {
 			</form>
 		);
 	}
+
+	renderUser = (user) => {
+		return <Redirect to={{
+			pathname: "/loyal-user",
+			state: { user }
+		}}/>;
+	}
 	
 	render() {
 		const { user } = this.state;
 		return (
 			<div>
-				{ user && <LoyalUser user={user}/> }
+				{ user && this.renderUser(user) }
 				{ !user && this.renderForm() }
 			</div>
 		);
