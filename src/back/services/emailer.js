@@ -17,14 +17,15 @@ const Emailer = function (app) {
 };
 
 Emailer.prototype.sendMail = function(amail) {
+	const self = this;
 	this.smtpTransport.sendMail(amail, function(error, response){
 		if (error){
-			this.logger.error(error);
+			self.logger.error(error);
 		} else{
-			this.logger.info("Message sent: " + JSON.stringify(response));
+			self.logger.info("Message sent: " + JSON.stringify(response));
 		}
 
-		this.smtpTransport.close();
+		self.smtpTransport.close();
 	});
 };
 

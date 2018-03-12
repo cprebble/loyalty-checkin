@@ -22,6 +22,7 @@ app.use(function (req, res, next) {
 	return next();
 });
 
+const retrySecs = 5000;
 const connectWithRetry = async function (mongodb_url, databaseName, times) {
 	return await (async function retry () {
 		times--;
@@ -32,13 +33,13 @@ const connectWithRetry = async function (mongodb_url, databaseName, times) {
 
 		} catch (err) {
 			// eslint-disable-next-line no-console
-			console.error(`Failed to connect to ${mongodb_url} on startup - retrying in 2 secs`, err);
+			console.error(`Failed to connect to ${mongodb_url} on startup - retrying in ${retrySecs} secs`, err);
 			if (times > 0) {
-				setTimeout(retry, 2000);
+				setTimeout(retry, retrySecs);
 			} 
-			// else {
-			// 	process.exit(1);
-			// }
+			else {
+				process.exit(1);
+			}
 		}
 	})();
 };

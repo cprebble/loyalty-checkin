@@ -1,19 +1,17 @@
-version: "2"
+version: "3"
 services:
-  
+
+  mongo:
+    image: "mongo:3.6"
+    command: mongod --storageEngine=wiredTiger --bind_ip_all
+    ports:
+      - "27017:27017"
+
   loyalty:
     build: .
     container_name: "loyalty"
     depends_on:
-      - mongo
+      - "mongo"
     ports:
       - "8080:8080"
 
-  mongo:
-    image: mongo:3.6
-    container_name: "mongo"
-    ports:
-      - "27017:27017"
-    environment:
-      AUTH: 'no'
-    command: --smallfiles

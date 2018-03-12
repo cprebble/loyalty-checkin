@@ -14,15 +14,17 @@ A NodeJS project that allows a user to enter a phone number and if recognized, s
 
 ## Solution Description
 
-How to run this solution locally: (given Git, NodeJS, NPM/yarn are installed)
+How to run this solution locally: (given Docker, Git, Node, NPM/yarn are installed)
 
 + git clone https://github.com/cprebble/loyalty-checkin.git
 + run ```yarn``` or ```npm install```
 + add SMTP service, user and password to .env file
++ run ```docker-compose up -d mongo```
 + run ```yarn build``` or ```npm run build```
 + run ```yarn local``` or ```npm run local```
 + in a browser navigate to http://localhost:8080
 
 ## TODO
-* notify user when checkin is throttled
+* fix docker-compose up
+* notify user during checkin throttle
 * more tests
