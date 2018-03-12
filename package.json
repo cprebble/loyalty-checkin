@@ -9,7 +9,7 @@
 		"lint-fix": "eslint --fix \"{./**/*.js,./**/*.jsx}\"",
 		"build": "yarn webpack",
 		"start": "node src/back/server.js",
-		"prepare": "yarn lint && yarn build",
+		"prepare": "yarn lint && yarn test && yarn build",
 		"local": "MONGODB_URL=mongodb://localhost:27017 node src/back/server.js | bunyan",
 		"test": "mocha --require test/mocha-setup.js \"src/**/*.spec.js\"",
 		"test-watch": "mocha --require test/mocha-setup.js \"src/**/*.spec.js\" --watch --watch-extensions js jsx",

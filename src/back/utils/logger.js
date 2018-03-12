@@ -10,14 +10,14 @@ const createLogger = (cfg) => {
 				stream: process.stdout,
 				level: cfg.logLevel || "debug"
 			},
-			{
-				id: "rotatingFile",
-				type: "rotating-file",
-				period: "1d",
-				//period: '1d',   // daily rotation
-				count: 3,        // keep 3 back copies
-				path: "./logfile.log"  // log debug and above to a file
-			}
+			// {
+			// 	id: "rotatingFile",
+			// 	type: "rotating-file",
+			// 	period: "1d",
+			// 	//period: '1d',   // daily rotation
+			// 	count: 3,        // keep 3 back copies
+			// 	path: "./logfile.log"  // log debug and above to a file
+			// }
 			
 		],
 		serializers: bunyan.stdSerializers
