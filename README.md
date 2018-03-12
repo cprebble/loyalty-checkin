@@ -1,8 +1,8 @@
 # Loyalty Checkin Exercise
 
-A NodeJS project that allows a user to enter a phone number and if recognized, shows how many times the user has checked in and how many loyalty points the user has, and sends the user an email showing point total. First time users shall enter first and last name and email address.
+A NodeJS project that allows a user to enter a phone number and if recognized, shows how many times the user has checked in and how many loyalty points the user has, and sends the user an email showing point total. First time users shall enter first and last name, phone number and email address.
 
-## The problem:
+## Problem Description
 * Upon loading the page I just want an input that will allow me to enter a valid phone number.
 * If the phone number is not recognized present the user with a form that allows them to enter their first name, last name and email address.  
 * Upon submission and once the user is registered I’d like for you to show a success page that shows me the balance of how many points I have.  
