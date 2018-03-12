@@ -1,5 +1,9 @@
+const throttle = require("lodash.throttle");
 const Users = require("../models/users");
-let logger, users;
+const Emailer = require("../services/emailer");
+let logger, users, emailer;
+
+const FIVE_MIN = 300000;
 
 const commonEndHandler = function(err, msg, res) {
 	if (err) {
@@ -20,6 +24,19 @@ const findUsers = async function (req, res) {
 	}
 };
 
+const pointsMsg = (points) => `You have ${points} points.`;
+const sendMail = (user) => {
+	const newPointsText = pointsMsg(user.points);
+	const amail = {
+		from: "Loyalty Checkin Node App",
+		to: user.email,
+		subject: "Your updated loyalty points",
+		text: newPointsText,
+		html: `<b>${newPointsText}</b>`
+	};
+	emailer.sendMail(amail);
+};
+
 const findUser = async function (req, res) {
 	try {
 		const userphone = req.params.phone;
@@ -27,6 +44,7 @@ const findUser = async function (req, res) {
 	
 		if (user) {
 			const updatedUser = await users.update(user);
+			sendMail(updatedUser);
 			commonEndHandler(null, updatedUser, res);
 
 		} else {
@@ -38,6 +56,7 @@ const findUser = async function (req, res) {
 		commonEndHandler(err, null, res);
 	}
 };
+const throttledCheckin = throttle(findUser, FIVE_MIN, { "leading": true });
 
 const addUser = async function(req, res) {
 	const newUserObj = {
@@ -88,10 +107,11 @@ module.exports = function (app) {
 	logger = app.locals.logger;
 	users = new Users(app);
 	app.locals.users = users;
+	emailer = new Emailer(app);
 	insertAdminUser();
 
 	app.get("/users", findUsers);
-	app.get("/users/:phone", findUser);
+	app.get("/users/:phone", throttledCheckin);
 	app.post("/users", addUser);
 	app.delete("/users/:phone", deleteUser);
 };
