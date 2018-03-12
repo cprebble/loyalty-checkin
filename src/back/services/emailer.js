@@ -1,14 +1,14 @@
 const mailer = require("nodemailer");
 
 const Emailer = function (app) {
-	const { smtpUser, smtpPassword } = app.locals.cfg;
+	const { smtpUser, smtpPassword, smtpService } = app.locals.cfg;
 	this.smtpPassword = smtpPassword;
 	this.smtpUser = smtpUser;
+	this.smtpService = smtpService;
 	this.logger = app.locals.logger;
 
-	// Use Smtp Protocol to send Email
 	this.smtpTransport = mailer.createTransport({
-		service: "gmail",
+		service: smtpService,
 		auth: {
 			user: smtpUser,
 			pass: smtpPassword

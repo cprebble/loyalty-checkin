@@ -24,7 +24,7 @@ const findUsers = async function (req, res) {
 	}
 };
 
-const pointsMsg = (points) => `You have ${points} points.`;
+const pointsMsg = (points) => `Hi from Loyalty Checkin Node App. You have ${points} points.`;
 const sendMail = (user) => {
 	const newPointsText = pointsMsg(user.points);
 	const amail = {

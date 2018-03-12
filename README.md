@@ -18,11 +18,11 @@ How to run this solution locally: (given Git, NodeJS, NPM/yarn are installed)
 
 + git clone https://github.com/cprebble/loyalty-checkin.git
 + run ```yarn``` or ```npm install```
-+ add SMTP user and password to .env file
++ add SMTP service, user and password to .env file
 + run ```yarn build``` or ```npm run build```
-+ run ```yarn start``` or ```npm run start```
++ run ```yarn local``` or ```npm run local```
 + in a browser navigate to http://localhost:8080
 
 ## TODO
-* fix checkin timeout to notify user
+* notify user when checkin is throttled
 * more tests
